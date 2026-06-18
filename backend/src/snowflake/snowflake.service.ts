@@ -17,7 +17,10 @@ export class SnowflakeService {
         id: crypto.randomUUID(),
         runDate: today.toISOString().slice(0, 10),
         query: CORTEX_SQL,
-        result: { RESULT: 'Mock insight: Sales increased 12% MoM. Top driver: new enterprise accounts in APAC region.' },
+        result: {
+          RESULT:
+            'Mock insight: Sales increased 12% MoM. Top driver: new enterprise accounts in APAC region.',
+        },
         savedAt: today.toISOString(),
       };
     }
@@ -25,11 +28,11 @@ export class SnowflakeService {
     try {
       const connection = snowflake.createConnection({
         account: process.env.SNOWFLAKE_ACCOUNT as string,
-        username: process.env.SNOWFLAKE_USER as string,
-        password: process.env.SNOWFLAKE_PASSWORD as string,
-        database: process.env.SNOWFLAKE_DATABASE as string,
-        warehouse: process.env.SNOWFLAKE_WAREHOUSE as string,
-        schema: process.env.SNOWFLAKE_SCHEMA as string,
+        username: process.env.SNOWFLAKE_USER,
+        password: process.env.SNOWFLAKE_PASSWORD,
+        database: process.env.SNOWFLAKE_DATABASE,
+        warehouse: process.env.SNOWFLAKE_WAREHOUSE,
+        schema: process.env.SNOWFLAKE_SCHEMA,
       });
       await new Promise<void>((resolve, reject) => {
         connection.connect((err) => {
@@ -41,18 +44,20 @@ export class SnowflakeService {
         });
       });
 
-      const rows = await new Promise<Record<string, unknown>[]>((resolve, reject) => {
-        connection.execute({
-          sqlText: CORTEX_SQL,
-          complete: (err, _stmt, rowsResult) => {
-            if (err) {
-              reject(err);
-            } else {
-              resolve((rowsResult as Record<string, unknown>[]) ?? []);
-            }
-          },
-        });
-      });
+      const rows = await new Promise<Record<string, unknown>[]>(
+        (resolve, reject) => {
+          connection.execute({
+            sqlText: CORTEX_SQL,
+            complete: (err, _stmt, rowsResult) => {
+              if (err) {
+                reject(err);
+              } else {
+                resolve((rowsResult as Record<string, unknown>[]) ?? []);
+              }
+            },
+          });
+        },
+      );
 
       if (!rows || rows.length === 0) {
         return null;
