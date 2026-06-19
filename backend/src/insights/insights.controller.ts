@@ -1,7 +1,7 @@
-import { Controller, Get, Post } from '@nestjs/common';
+import { Controller, Get, HttpException, HttpStatus, Post } from '@nestjs/common';
 import { InsightsService } from './insights.service';
 import { SnowflakeService } from '../snowflake/snowflake.service';
-import { InsightRecord } from '../shared/types';
+import { ClientSlaRow, InsightRecord } from '../shared/types';
 
 @Controller('insights')
 export class InsightsController {
@@ -25,5 +25,17 @@ export class InsightsController {
     }
 
     return { triggered: true, saved: false };
+  }
+
+  @Get('top-clients')
+  async getTopClients(): Promise<{ clients: ClientSlaRow[] }> {
+    const clients = await this.snowflakeService.runTopClientsQuery();
+    if (clients === null) {
+      throw new HttpException(
+        { error: 'Failed to fetch top-clients data' },
+        HttpStatus.SERVICE_UNAVAILABLE,
+      );
+    }
+    return { clients };
   }
 }

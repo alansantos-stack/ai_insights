@@ -5,3 +5,10 @@ export interface InsightRecord {
   result: unknown;
   savedAt: string; // ISO timestamp
 }
+
+export interface ClientSlaRow {
+  idClient: string;
+  avgSlaLastMonth: number;
+  historicalAvgSla: number;
+  overOwnAvg: number;
+}

@@ -34,3 +34,21 @@ export async function triggerInsights(): Promise<{ triggered: boolean }> {
   }
   return res.json();
 }
+
+export interface ClientSlaRow {
+  idClient: string;
+  avgSlaLastMonth: number;
+  historicalAvgSla: number;
+  overOwnAvg: number;
+}
+
+export async function getTopClients(): Promise<ClientSlaRow[]> {
+  const res = await fetch(`${BASE}/insights/top-clients`, {
+    cache: 'no-store',
+  });
+  if (!res.ok) {
+    throw new Error(`Failed to fetch top clients: ${res.status}`);
+  }
+  const data = await res.json();
+  return data.clients;
+}

@@ -41,10 +41,10 @@ export default function TriggerButton({ onSuccess }: TriggerButtonProps) {
         aria-busy={isLoading}
         aria-label="Manually trigger the AI insights job"
         className={[
-          'inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500',
+          'inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-brand-ring)]',
           isLoading
-            ? 'bg-blue-300 text-white cursor-not-allowed'
-            : 'bg-blue-600 text-white hover:bg-blue-700 active:bg-blue-800',
+            ? 'bg-[var(--color-brand-disabled)] text-white cursor-not-allowed'
+            : 'bg-[var(--color-brand)] text-white hover:bg-[var(--color-brand-hover)] active:bg-[var(--color-brand-active)]',
         ].join(' ')}
       >
         {isLoading && (
@@ -77,7 +77,7 @@ export default function TriggerButton({ onSuccess }: TriggerButtonProps) {
         <p
           role="status"
           aria-live="polite"
-          className="text-sm text-green-700 font-medium"
+          className="text-sm text-[var(--color-success)] font-medium"
         >
           Job triggered successfully. New insights will appear shortly.
         </p>
@@ -87,7 +87,7 @@ export default function TriggerButton({ onSuccess }: TriggerButtonProps) {
         <p
           role="alert"
           aria-live="assertive"
-          className="text-sm text-red-700 font-medium"
+          className="text-sm text-[var(--color-danger)] font-medium"
         >
           Error: {errorMessage}
         </p>

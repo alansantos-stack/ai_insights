@@ -3,9 +3,10 @@ import InsightCard from './InsightCard';
 
 interface InsightListProps {
   insights: InsightRecord[];
+  onCardClick?: () => void;
 }
 
-export default function InsightList({ insights }: InsightListProps) {
+export default function InsightList({ insights, onCardClick }: InsightListProps) {
   if (insights.length === 0) {
     return (
       <div
@@ -13,7 +14,7 @@ export default function InsightList({ insights }: InsightListProps) {
         role="status"
         aria-live="polite"
       >
-        <p className="text-gray-500 text-base">
+        <p className="text-[var(--color-text-caption)] text-base">
           No insights yet. The next run is on the 1st of next month.
         </p>
       </div>
@@ -30,7 +31,7 @@ export default function InsightList({ insights }: InsightListProps) {
       <ul className="flex flex-col gap-4" role="list">
         {sorted.map((insight) => (
           <li key={insight.id}>
-            <InsightCard insight={insight} />
+            <InsightCard insight={insight} onViewClients={onCardClick} />
           </li>
         ))}
       </ul>
